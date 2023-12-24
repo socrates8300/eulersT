@@ -32,14 +32,30 @@ fn main() -> Result<()> {
 fn euler_totient(n: &BigUint, gcd_fn: fn(&BigUint, &BigUint) -> BigUint) -> BigUint {
     let mut count = BigUint::zero();
     let mut i = BigUint::one();
+    let hundred = BigUint::from(100u32);
+    let mut progress = BigUint::zero();
+    let mut last_percentage = BigUint::zero();
+
     while &i < n {
         if gcd_fn(&i, n).is_one() {
             count += BigUint::one();
         }
         i += BigUint::one();
+
+        // Calculate and print the progress
+        let new_progress = (&i * &hundred) / n;
+        if new_progress > progress {
+            progress = new_progress;
+            let percentage = &progress.to_string();
+            if percentage != &last_percentage.to_string() {
+                println!("Progress: {}%", percentage);
+                last_percentage = progress.clone();
+            }
+        }
     }
     count
 }
+
 
 // Function to calculate the greatest common divisor of a and b using the Euclidean algorithm
 // TODO: Consider replacing recursion with iteration to avoid potential stack overflow for large inputs
@@ -54,27 +70,28 @@ fn euclidean_gcd(a: &BigUint, b: &BigUint) -> BigUint {
 // Function to calculate the greatest common divisor of u and v using the binary GCD algorithm (Stein's algorithm)
 // TODO: Consider optimizing this function for large inputs
 fn binary_gcd(u: &BigUint, v: &BigUint) -> BigUint {
-    if *u == BigUint::zero() {
-        return v.clone();
-    }
-    if *v == BigUint::zero() {
-        return u.clone();
-    }
+    // let zero = BigUint::zero();
+    let mut u = u.clone();
+    let mut v = v.clone();
 
-    let shift = (u | v).trailing_zeros().unwrap_or(0);
-    let mut u = u.clone() >> shift;
-    let mut v = v.clone() >> shift;
+    if u.is_zero() { return v; }
+    if v.is_zero() { return u; }
 
-    while u != BigUint::zero() {
-        u = u.clone() >> u.trailing_zeros().unwrap_or(0);
-        v = v.clone() >> v.trailing_zeros().unwrap_or(0);
+    let shift = (&u | &v).trailing_zeros().unwrap_or(0);
+
+    u >>= u.trailing_zeros().unwrap_or(0);
+    v >>= v.trailing_zeros().unwrap_or(0);
+
+    while !u.is_zero() {
+        u >>= u.trailing_zeros().unwrap_or(0);
 
         if u >= v {
-            u = (u.clone() - v.clone()) >> 1;
-        } else {
-            v = (v.clone() - u.clone()) >> 1;
+            std::mem::swap(&mut u, &mut v);
+            u -= &v;
         }
+
+        v >>= v.trailing_zeros().unwrap_or(0);
     }
-    // Return the shifted value of v as the result
+
     v << shift
 }
