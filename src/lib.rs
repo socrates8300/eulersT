@@ -3,6 +3,16 @@ pub mod calc {
     use num_bigint::BigUint;
     use num_traits::{One, Zero};
 
+    pub fn euler_totient_rsa(p: &BigUint, q: &BigUint) -> BigUint {
+        // Since p and q are prime, φ(p) = p - 1 and φ(q) = q - 1
+        // Therefore, φ(N) = φ(p) * φ(q) = (p - 1) * (q - 1)
+        let one = BigUint::one();
+        let p_minus_one = p - &one;
+        let q_minus_one = q - &one;
+
+        p_minus_one * q_minus_one
+    }
+
     pub fn euler_totient(n: BigUint, gcd_fn: fn(BigUint, BigUint) -> BigUint) -> BigUint {
         let mut count = BigUint::zero();
         let mut i = BigUint::one();
