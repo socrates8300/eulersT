@@ -105,14 +105,6 @@ If you work with large integers or want to save time, **enabling `--features par
 
 ---
 
-## About parallel builds generally:
-
-Just like parallel building in Docker Compose or CI systems can speed up large multi-component builds substantially [ardalis.com](https://ardalis.com/speed-up-docker-compose-with-parallel-builds/), [developer.hashicorp.com](https://developer.hashicorp.com/packer/tutorials/docker-get-started/docker-get-started-parallel-builds), this project achieves better performance by dividing the computation across many cores.
-
-> On multi-core CPUs, expect substantial time savings—sometimes 2x or more—compared to single-threaded mode.
-
----
-
 ## License
 
 MIT OR Apache-2.0
@@ -122,8 +114,6 @@ MIT OR Apache-2.0
 #### References:
 
 - [Euler's Totient Function — Wikipedia](https://en.wikipedia.org/wiki/Euler%27s_totient_function)
-- [Speed Up Docker Compose with Parallel Builds](https://ardalis.com/speed-up-docker-compose-with-parallel-builds/)
-- [Hashicorp: Packer Parallel Builds](https://developer.hashicorp.com/packer/tutorials/docker-get-started/docker-get-started-parallel-builds)
 
 ---
 
